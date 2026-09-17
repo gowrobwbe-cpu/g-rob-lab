@@ -72,8 +72,8 @@ function TechnicalCursor() {
     const move = (event: MouseEvent) => {
       cursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
       const target = (event.target as HTMLElement).closest<HTMLElement>("[data-cursor]");
-      document.body.dataset.cursorActive = target ? "true" : "false";
-      label.textContent = target?.dataset.cursor ?? "";
+      document.body.dataset["cursorActive"] = target ? "true" : "false";
+      label.textContent = target?.dataset["cursor"] ?? "";
     };
     window.addEventListener("mousemove", move);
     return () => window.removeEventListener("mousemove", move);
@@ -128,6 +128,7 @@ function CircuitPath() {
   const [selected, setSelected] = useState(1);
   const [buildStep, setBuildStep] = useState(-1);
   const [building, setBuilding] = useState(false);
+  const selectedComponent = components[selected] ?? components[0];
   const activate = () => {
     if (building) return;
     setBuilding(true); setBuildStep(0); setSelected(1);
@@ -151,9 +152,9 @@ function CircuitPath() {
       </div>
       <aside className="component-readout" aria-live="polite">
         <div><span>SELECTED COMPONENT</span><b>0{selected + 1}</b></div>
-        <h3 id="system-title">{components[selected].name}</h3>
-        <p>{components[selected].detail}</p>
-        <dl><div><dt>SYSTEM ROLE</dt><dd>{components[selected].type}</dd></div><div><dt>LINK STATUS</dt><dd className="online">CONNECTED</dd></div></dl>
+        <h3 id="system-title">{selectedComponent.name}</h3>
+        <p>{selectedComponent.detail}</p>
+        <dl><div><dt>SYSTEM ROLE</dt><dd>{selectedComponent.type}</dd></div><div><dt>LINK STATUS</dt><dd className="online">CONNECTED</dd></div></dl>
       </aside>
     </div>
     <div className="build-control">
@@ -221,7 +222,7 @@ function AiContent() {
 
 function TechLab() {
   const [active, setActive] = useState(0);
-  const part = labParts[active]; const ActiveIcon = part[4];
+  const part = labParts[active] ?? labParts[0]; const ActiveIcon = part[4];
   return <section id="tech-lab" className="section-band lab-band"><div className="page-shell"><SectionHeading number="06" eyebrow="INTERACTIVE BENCH" title="MY TECH LAB" description="Select a component on the virtual workbench to inspect its role in an electronic system." />
     <div className="lab-console reveal"><div className="lab-bench">{labParts.map(([name,,, ,Icon], index) => <Button key={name} variant="circuit" className={`lab-part part-${index + 1} ${active === index ? "active" : ""}`} onClick={() => setActive(index)} data-cursor="INSPECT"><Icon/><span>{name}</span></Button>)}<div className="bench-lines" aria-hidden="true"/></div><aside className="lab-readout"><div className="readout-icon"><ActiveIcon/></div><span>COMPONENT 0{active + 1}</span><h3>{part[0]}</h3><dl><div><dt>WHAT IT DOES</dt><dd>{part[1]}</dd></div><div><dt>TYPICAL USE</dt><dd>{part[2]}</dd></div><div><dt>RELATED PROJECT</dt><dd>{part[3]}</dd></div></dl></aside></div>
   </div></section>;
