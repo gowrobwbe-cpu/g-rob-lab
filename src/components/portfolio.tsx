@@ -27,7 +27,7 @@ import {
 import {
   Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger,
 } from "@/components/ui/sheet";
-import portraitAsset from "@/assets/gowrob-dash-portrait.png.asset.json";
+import portraitAsset from "@/assets/gowrob-dash-professional.png.asset.json";
 import { aiContent, components, journey, labParts, navItems, projects, skills } from "@/lib/portfolio-data";
 
 const socials = [
@@ -117,7 +117,7 @@ function PortraitConsole() {
     <div className="portrait-orbit orbit-one" aria-hidden="true" />
     <div className="portrait-orbit orbit-two" aria-hidden="true" />
     <div className="portrait-scan" aria-hidden="true" />
-    <img src={portraitAsset.url} alt="Gowrob Dash, Electronics student and G-Robotics enthusiast" fetchPriority="high" />
+    <img src={portraitAsset.url} alt="Professional portrait of Gowrob Dash, Electronics student and G-Robotics enthusiast" fetchPriority="high" />
     <div className="portrait-readout top"><span>SUBJECT / GD-01</span><b>IDENTITY LOCKED</b></div>
     <div className="portrait-readout bottom"><span>SYLHET, BD</span><b>LAB ONLINE</b></div>
     <div className="portrait-nodes" aria-hidden="true"><i /><i /><i /><i /></div>
