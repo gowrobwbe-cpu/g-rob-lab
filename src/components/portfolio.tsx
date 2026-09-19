@@ -27,7 +27,16 @@ import {
 import {
   Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger,
 } from "@/components/ui/sheet";
+import emailjs from "@emailjs/browser";
+import { toast } from "sonner";
 import portraitAsset from "@/assets/gowrob-dash-professional.png.asset.json";
+
+// EmailJS public credentials (safe to keep in client code).
+const EMAILJS = {
+  publicKey: "W-AOJDujLssB5T31D",
+  templateId: "template_hqbdert",
+  serviceId: "service_230k95b",
+} as const;
 import { aiContent, components, journey, labParts, navItems, projects, skills } from "@/lib/portfolio-data";
 
 const socials = [
