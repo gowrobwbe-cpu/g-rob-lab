@@ -27,7 +27,16 @@ import {
 import {
   Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger,
 } from "@/components/ui/sheet";
+import emailjs from "@emailjs/browser";
+import { toast } from "sonner";
 import portraitAsset from "@/assets/gowrob-dash-professional.png.asset.json";
+
+// EmailJS public credentials (safe to keep in client code).
+const EMAILJS = {
+  publicKey: "W-AOJDujLssB5T31D",
+  templateId: "template_hqbdert",
+  serviceId: "service_230k95b",
+} as const;
 import { aiContent, components, journey, labParts, navItems, projects, skills } from "@/lib/portfolio-data";
 
 const socials = [
@@ -249,16 +258,39 @@ function Certificates() {
 }
 
 function Contact() {
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); const data = new FormData(event.currentTarget);
-    const subject = encodeURIComponent(`Portfolio message from ${String(data.get("name") ?? "")}`);
-    const body = encodeURIComponent(`Name: ${String(data.get("name") ?? "")}\nEmail: ${String(data.get("email") ?? "")}\n\n${String(data.get("message") ?? "")}`);
-    window.location.href = `mailto:Gowrobwbe@gmail.com?subject=${subject}&body=${body}`;
+  const [sending, setSending] = useState(false);
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    setSending(true);
+    try {
+      await emailjs.send(
+        EMAILJS.serviceId,
+        EMAILJS.templateId,
+        {
+          name: String(data.get("name") ?? ""),
+          email: String(data.get("email") ?? ""),
+          message: String(data.get("message") ?? ""),
+          from_name: String(data.get("name") ?? ""),
+          from_email: String(data.get("email") ?? ""),
+          reply_to: String(data.get("email") ?? ""),
+          title: "Portfolio message",
+        },
+        { publicKey: EMAILJS.publicKey },
+      );
+      toast.success("Message sent — thanks for reaching out!");
+      form.reset();
+    } catch {
+      toast.error("Message could not be sent. Please email Gowrobwbe@gmail.com directly.");
+    } finally {
+      setSending(false);
+    }
   };
   return <><section className="exploring-strip reveal"><div className="page-shell"><div><span><i/> ACTIVE EXPLORATION</span><h2>Electronics + Robotics + AI</h2><p>Learning, building and experimenting with new technology.</p></div><div className="signal-wave" aria-hidden="true">{Array.from({length:18}).map((_,i)=><i key={i}/>)}</div></div></section>
     <section id="contact" className="section-band contact-band"><div className="page-shell"><SectionHeading number="10" eyebrow="OPEN CHANNEL" title="LET’S BUILD SOMETHING" description="Have a project idea, collaboration opportunity or technology concept?" />
       <div className="contact-layout"><div className="contact-details reveal"><a href="mailto:Gowrobwbe@gmail.com" data-cursor="MAIL"><AtSign/><span>EMAIL</span><strong>Gowrobwbe@gmail.com</strong></a><div><MapPin/><span>LOCATION</span><strong>Sylhet, Bangladesh</strong></div><div className="social-row">{socials.map(({label,href,icon:Icon,pending}) => <a key={label} href={href} target={pending || href.startsWith("mailto") ? undefined : "_blank"} rel="noreferrer" aria-label={pending ? `${label} URL pending` : label} title={pending ? "URL pending" : label} data-cursor="LINK"><Icon/>{pending ? <i/> : null}</a>)}</div></div>
-      <form className="contact-form reveal" onSubmit={submit}><label><span>NAME</span><input name="name" required placeholder="Your name" /></label><label><span>EMAIL</span><input name="email" type="email" required placeholder="you@example.com" /></label><label><span>MESSAGE</span><textarea name="message" required rows={5} placeholder="Tell me about your idea" /></label><Button variant="signal" size="xl" type="submit">Send Message <ArrowRight/></Button></form></div>
+      <form className="contact-form reveal" onSubmit={submit}><label><span>NAME</span><input name="name" required placeholder="Your name" /></label><label><span>EMAIL</span><input name="email" type="email" required placeholder="you@example.com" /></label><label><span>MESSAGE</span><textarea name="message" required rows={5} placeholder="Tell me about your idea" /></label><Button variant="signal" size="xl" type="submit" disabled={sending}>{sending ? "Sending…" : "Send Message"} <ArrowRight/></Button></form></div>
     </div></section></>;
 }
 
