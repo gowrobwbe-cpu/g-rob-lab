@@ -249,11 +249,34 @@ function Certificates() {
 }
 
 function Contact() {
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); const data = new FormData(event.currentTarget);
-    const subject = encodeURIComponent(`Portfolio message from ${String(data.get("name") ?? "")}`);
-    const body = encodeURIComponent(`Name: ${String(data.get("name") ?? "")}\nEmail: ${String(data.get("email") ?? "")}\n\n${String(data.get("message") ?? "")}`);
-    window.location.href = `mailto:Gowrobwbe@gmail.com?subject=${subject}&body=${body}`;
+  const [sending, setSending] = useState(false);
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    setSending(true);
+    try {
+      await emailjs.send(
+        EMAILJS.serviceId,
+        EMAILJS.templateId,
+        {
+          name: String(data.get("name") ?? ""),
+          email: String(data.get("email") ?? ""),
+          message: String(data.get("message") ?? ""),
+          from_name: String(data.get("name") ?? ""),
+          from_email: String(data.get("email") ?? ""),
+          reply_to: String(data.get("email") ?? ""),
+          title: "Portfolio message",
+        },
+        { publicKey: EMAILJS.publicKey },
+      );
+      toast.success("Message sent — thanks for reaching out!");
+      form.reset();
+    } catch {
+      toast.error("Message could not be sent. Please email Gowrobwbe@gmail.com directly.");
+    } finally {
+      setSending(false);
+    }
   };
   return <><section className="exploring-strip reveal"><div className="page-shell"><div><span><i/> ACTIVE EXPLORATION</span><h2>Electronics + Robotics + AI</h2><p>Learning, building and experimenting with new technology.</p></div><div className="signal-wave" aria-hidden="true">{Array.from({length:18}).map((_,i)=><i key={i}/>)}</div></div></section>
     <section id="contact" className="section-band contact-band"><div className="page-shell"><SectionHeading number="10" eyebrow="OPEN CHANNEL" title="LET’S BUILD SOMETHING" description="Have a project idea, collaboration opportunity or technology concept?" />
