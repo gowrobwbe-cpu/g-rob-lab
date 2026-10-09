@@ -44,7 +44,7 @@ const socials = [
   { label: "YouTube 1", href: "#youtube-one-pending", icon: Youtube, pending: true },
   { label: "YouTube 2", href: "https://www.youtube.com/channel/UC5vqvuXIFt35KuA2dVvaWBA", icon: Youtube },
   { label: "LinkedIn", href: "https://linkedin.com/in/gowrob-dash-7847913ab", icon: Linkedin },
-  { label: "GitHub", href: "https://github.com/gowrobwbe-cpuURL", icon: Github },
+  { label: "GitHub", href: "https://github.com/gowrobwbe-cpu", icon: Github },
   { label: "Email", href: "mailto:Gowrobwbe@gmail.com", icon: Mail },
 ];
 
