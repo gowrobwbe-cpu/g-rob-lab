@@ -666,7 +666,7 @@ LinkedIn:
 [linkedin.com/in/gowrob-dash-7847913ab]
 
 GitHub:
-[ https://github.com/gowrobwbe-cpuURL ]
+[https://github.com/gowrobwbe-cpu]
 
 Email:
 Gowrobwbe@gmail.com
